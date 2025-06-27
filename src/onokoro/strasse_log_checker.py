@@ -116,7 +116,6 @@ def check_log(exp_number=57,input_path="./data/onokoro57/logs/*.txt"):
     else:
         print('experiment number does not exist')
 
-
 if __name__ == "__main__":
 
     arg_dict = parse_args(sys.argv)
