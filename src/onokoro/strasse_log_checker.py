@@ -110,8 +110,12 @@ def check_log_onokoro57(input_path="./data/onokoro57/logs/*.txt"):
     fig.show()
 
 
-def check_log(exp_number=57,input_path="./data/onokoro57/logs/*.txt"):
-    if exp_number == 57:
+def check_log():
+    arg_dict = parse_args(sys.argv)
+    input_path = (arg_dict.get("input", "./data/onokoro57/logs/*.txt"))
+    experiment_number = int(arg_dict.get("experiment_number", 57))
+
+    if experiment_number == 57:
         check_log_onokoro57(input_path)
     else:
         print('experiment number does not exist')
