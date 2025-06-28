@@ -1,3 +1,10 @@
+"""!
+@file test
+@version 1
+@author Fumutaka ENDO
+@date 2025-06-28T18:50:58+09:00
+@brief log viewer
+"""
 import pandas as pd
 import glob
 import plotly.express as px
@@ -6,16 +13,16 @@ from plotly.subplots import make_subplots
 import pytz
 import sys
 import os
-
-def parse_args(argv):
-    args_dict = {}
-    for arg in argv[1:]:
-        if '=' in arg:
-            key, value = arg.split('=')
-            args_dict[key] = value
-    return args_dict
+import argparse 
 
 def parse_temperature_log(file_path):
+    """!
+    @brief parse strasse log file
+
+    @param efile_path input file path
+
+    @return DataFrame
+    """
     data_lines = []
 
     in_comment_block = False
@@ -38,7 +45,12 @@ def parse_temperature_log(file_path):
 
     return df
 
-def check_log_onokoro57(input_path="./data/onokoro57/logs/*.txt"):
+def check_log_onokoro57(input_path=None):
+    """!
+    @brief read and plot logs
+
+    @param input_path input file path
+    """
     # ログファイルをすべて読み込む
     log_files = sorted(glob.glob(input_path))  # 例：カレントディレクトリにある .txt ファイルすべて
 
@@ -76,7 +88,7 @@ def check_log_onokoro57(input_path="./data/onokoro57/logs/*.txt"):
     ]
 
     # サブプロットを作成（行数 = グループ数）
-    fig = make_subplots(rows=len(groups), cols=1, shared_xaxes=True, vertical_spacing=0.03)
+    fig = make_subplots(rows=len(groups), cols=1, shared_xaxes=False, vertical_spacing=0.05)
 
     # 各グループを描画
     for i, group in enumerate(groups):
@@ -97,7 +109,7 @@ def check_log_onokoro57(input_path="./data/onokoro57/logs/*.txt"):
     # レイアウト調整
     fig.update_layout(
         height=300 * len(groups),
-        title_text="Grouped Sensor Readings with Legend",
+        title_text="STRASSE log viewr",
         legend=dict(
             orientation="v",
             x=1.05,
@@ -109,21 +121,23 @@ def check_log_onokoro57(input_path="./data/onokoro57/logs/*.txt"):
 
     fig.show()
 
-
 def check_log():
-    arg_dict = parse_args(sys.argv)
-    input_path = (arg_dict.get("input", "./data/onokoro57/logs/*.txt"))
-    experiment_number = int(arg_dict.get("experiment_number", 57))
+    """!
+    @brief log plot method for uv command 
+
+    CLI argument:
+    @arg input files path for loading
+    @arg experiment-number experiment number
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-in","--input", help="files path for loading", type=str, default="./data/onokoro57/logs/*.txt")
+    parser.add_argument("-en","--experiment-number", help="experiment number", type=int, default=57)
+    args = parser.parse_args()
+
+    input_path: str = args.input
+    experiment_number: int = args.experiment_number
 
     if experiment_number == 57:
         check_log_onokoro57(input_path)
     else:
         print('experiment number does not exist')
-
-if __name__ == "__main__":
-
-    arg_dict = parse_args(sys.argv)
-    input_path = (arg_dict.get("input", "./data/onokoro57/logs/*.txt"))
-    experiment_number = int(arg_dict.get("experiment_number", 57))
-    check_log(experiment_number, input_path)
-

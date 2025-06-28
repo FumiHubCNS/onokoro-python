@@ -18,10 +18,10 @@ STRASSEのLogをplotlyを使って描画するコマンド。
 uv run check_strasse_log
 ```
 
-引数として`input`(ログファイルのパス)と`experiment_number`(実験課題番号)を指定でき、デフォルトは`./data/onokoro57/logs/*.txt`と`57`である。
+引数として`-i`(ログファイルのパス)と`-en`(実験課題番号)を指定でき、デフォルトは`./data/onokoro57/logs/*.txt`と`57`である。
 
 指定する際は以下のようにする。
 
 ```bash
-uv run check_strasse_log experiment_number=57 input="./data/onokoro57/logs/*.txt"
+uv run check_strasse_log -en 57 -in "./data/onokoro57/logs/*.txt"
 ```
